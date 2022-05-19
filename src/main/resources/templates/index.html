@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Главная страница</title>
@@ -7,74 +7,74 @@
     <link th:href="@{/main.css}" rel="stylesheet"/>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#request-form").submit(function (event) {
+                event.preventDefault();
+                ajaxPost();
+            })
+        })
+
+        function ajaxPost() {
+            let url = "http://localhost:8090/?vacancyName=" + $("#vacancyName").val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (response) {
+                    let tbody = document.getElementById("tbody");
+                    for (let obj in response) {
+                        let data = response[obj];
+                        let minSalary = data['minimalSalary'] === null ? "не указано" : data['minimalSalary'];
+                        let maxSalary = data['maximalSalary'] === null ? "не указано" : data['maximalSalary'];
+                        let tr = "<tr>";
+                        tr += "<td>" + data['name'] + "</td>" + "<td>" + data['companyName'] + "</td>"
+                            + "<td>" + "От " + minSalary + " до " + maxSalary + "</td>"
+                            + "<td>" + "https://ekaterinburg.hh.ru/vacancy/" + data['id'] + "?host=hh.ru" + "</td>" + "</tr>"
+                        tbody.innerHTML += tr;
+                    }
+                },
+                error: function (response) {
+                    alert("Произошла ошибка");
+                }
+            })
+            resetData();
+        }
+
+        function resetData() {
+            $("#vacancyName").val("");
+        }
+    </script>
 </head>
 <body>
+
 <div class="container search-table">
     <div class="search-box">
         <div class="row">
             <div class="col-md-3">
-                <h5>Search All Fields</h5>
+                <h5>Введите название вакансии</h5>
             </div>
             <div class="col-md-9">
-                <input type="text" id="myInput" onkeyup="myFunction()" class="form-control"
-                       placeholder="Search all fields e.g. HTML">
-                <script>
-                    $(document).ready(function () {
-                        $("#myInput").on("keyup", function () {
-                            var value = $(this).val().toLowerCase();
-                            $("#myTable tr").filter(function () {
-                                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                            });
-                        });
-                    });
-                </script>
+                <form id="request-form" th:action="@{/}" th:method="post">
+                    <p>Название вакансии: <input type="text" id="vacancyName" name="vacancyName"
+                                                 th:value="${vacancyName}"/></p>
+                    <p><input type="button" value="Отправить" onclick="ajaxPost();"/> <input type="reset"
+                                                                                             value="Сбросить"/></p>
+                </form>
             </div>
         </div>
     </div>
     <div class="search-list">
-        <h3>303 Records Found</h3>
+        <h3>Результат запроса</h3>
         <table class="table" id="myTable">
             <thead>
             <tr>
-                <th>Title</th>
-                <th>Category</th>
+                <th>Название вакансии</th>
+                <th>Работодатель</th>
+                <th>Зарплата</th>
+                <th>Ссылка на hh.ru</th>
             </tr>
             </thead>
-            <tbody>
-
-
-            <tr>
-                <td>HTML</td>
-                <td>Web Development</td>
-            </tr>
-            <tr>
-                <td>PHP</td>
-                <td>Web Development</td>
-            </tr>
-            <tr>
-                <td>C#</td>
-                <td>Programming Language</td>
-            </tr>
-            <tr>
-                <td>JavaScript</td>
-                <td>Web Development</td>
-            </tr>
-            <tr>
-                <td>Bootstrap</td>
-                <td>Web Design</td>
-            </tr>
-            <tr>
-                <td>Python</td>
-                <td>Programming Language</td>
-            </tr>
-            <tr>
-                <td>Android</td>
-                <td>App Development</td>
-            </tr>
-            <tr>
-                <td>Angular JS</td>
-                <td>Web Delopment</td>
-            </tr>
+            <tbody id="tbody">
             </tbody>
         </table>
 

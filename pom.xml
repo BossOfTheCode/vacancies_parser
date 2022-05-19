@@ -11,7 +11,7 @@
 	<groupId>ru.welcometotheclub</groupId>
 	<artifactId>vacanciesparser</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>vacanciesparser</name>
+	<name>VacanciesParser</name>
 	<description>HH vacancies parser</description>
 	<properties>
 		<java.version>11</java.version>

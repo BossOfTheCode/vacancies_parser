@@ -1,6 +1,10 @@
 .search-table {
-    padding: 10%;
-    margin-top: -6%;
+    padding: 0;
+    margin-top: 0;
+}
+
+.row {
+    margin-right: -350px;
 }
 
 .search-box {
@@ -23,5 +27,5 @@
 .search-list h3 {
     background: #eee;
     padding: 3%;
-    margin-bottom: 0%;
+    margin-bottom: 0;
 }
