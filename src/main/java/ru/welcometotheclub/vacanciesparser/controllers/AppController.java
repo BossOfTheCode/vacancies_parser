@@ -64,6 +64,7 @@ public class AppController {
             }
         }
         FileUtils.saveToCSV(vacancyName, skillsFrequencies);
+
         return new ResponseEntity<>(vacancies, HttpStatus.OK);
     }
 

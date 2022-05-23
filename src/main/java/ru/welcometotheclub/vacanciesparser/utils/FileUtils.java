@@ -22,6 +22,19 @@ public class FileUtils {
         printWriter.close();
     }
 
+    public static void getInfographic(String vacancyName) {
+        String inputFileName = "C:/Users/ching/IdeaProjects/vacancies_parser/src/main/resources/python/" + vacancyName + ".csv";
+        String outputFileName = "C:/Users/ching/IdeaProjects/vacancies_parser/src/main/resources/python/" + vacancyName + ".png";
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "C:/Users/ching/IdeaProjects/vacancies_parser/src/main/resources/python/main.py", inputFileName, outputFileName, "10");
+        processBuilder.redirectErrorStream(true);
+        try {
+            Process process = processBuilder.start();
+            System.out.println(process.waitFor());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static List<String> prepareData(HashMap<String, Integer> data) {
         StringBuilder stringBuilder = new StringBuilder();
         List<String> preparedData = new ArrayList<>();
