@@ -12,7 +12,10 @@ import ru.welcometotheclub.vacanciesparser.models.entity.Vacancy;
 import ru.welcometotheclub.vacanciesparser.models.service.RestService;
 import ru.welcometotheclub.vacanciesparser.models.service.SkillService;
 import ru.welcometotheclub.vacanciesparser.models.service.VacancyService;
+import ru.welcometotheclub.vacanciesparser.utils.FileUtils;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -37,8 +40,9 @@ public class AppController {
 
     @PostMapping("/")
     @ResponseBody
-    public ResponseEntity<List<Vacancy>> analyseVacancyByName(@RequestParam String vacancyName) throws JsonProcessingException {
+    public ResponseEntity<List<Vacancy>> analyseVacancyByName(@RequestParam String vacancyName) throws IOException {
         List<Vacancy> vacancies = vacancyService.findVacanciesByName(vacancyName);
+        HashMap<String, Integer> skillsFrequencies = new HashMap<>();
         if (vacancies.size() == 0) {
             vacancies = restService.getVacanciesByNameFromHH(vacancyName);
             for (Vacancy vacancy : vacancies) {
@@ -49,6 +53,18 @@ public class AppController {
             }
             vacancyService.saveAll(vacancies);
         }
+        for (Vacancy vacancy : vacancies) {
+            List<Skill> skills = vacancy.getSkills();
+            for (Skill skill : skills) {
+                String name = skill.getName();
+                if (!skillsFrequencies.containsKey(name))
+                    skillsFrequencies.put(name, 1);
+                else
+                    skillsFrequencies.replace(name, skillsFrequencies.get(name) + 1);
+            }
+        }
+        FileUtils.saveToCSV(vacancyName, skillsFrequencies);
         return new ResponseEntity<>(vacancies, HttpStatus.OK);
     }
+
 }
