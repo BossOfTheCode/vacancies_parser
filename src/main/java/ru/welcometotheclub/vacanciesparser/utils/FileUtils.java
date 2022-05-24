@@ -16,20 +16,26 @@ public class FileUtils {
         if (!csvOutputFile.exists())
             csvOutputFile.createNewFile();
         PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(csvOutputFile), StandardCharsets.UTF_8));
-        printWriter.write("Навык;Частота\n");
         for (String s : prepareData(data))
             printWriter.write(s);
         printWriter.close();
     }
 
     public static void getInfographic(String vacancyName) {
-        String inputFileName = "C:/Users/ching/IdeaProjects/vacancies_parser/src/main/resources/python/" + vacancyName + ".csv";
-        String outputFileName = "C:/Users/ching/IdeaProjects/vacancies_parser/src/main/resources/python/" + vacancyName + ".png";
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "C:/Users/ching/IdeaProjects/vacancies_parser/src/main/resources/python/main.py", inputFileName, outputFileName, "10");
+        File python = new File (System.getenv("LOCALAPPDATA") + "/Programs/Python/Python39/python.exe");
+        File inputFile = new File("src/main/resources/datasets/" + vacancyName + ".csv");
+        File outFile = new File("src/main/resources/static/" + vacancyName + ".png");
+        File scriptFile = new File("src/main/resources/python/main.py");
+        ProcessBuilder processBuilder =
+                new ProcessBuilder(python.getAbsolutePath(),
+                        scriptFile.getAbsolutePath(),
+                        inputFile.getAbsolutePath(),
+                        outFile.getAbsolutePath(),
+                        "10");
         processBuilder.redirectErrorStream(true);
         try {
             Process process = processBuilder.start();
-            System.out.println(process.waitFor());
+            process.waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

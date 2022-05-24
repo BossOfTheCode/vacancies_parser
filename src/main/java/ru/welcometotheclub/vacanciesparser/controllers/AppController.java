@@ -1,6 +1,5 @@
 package ru.welcometotheclub.vacanciesparser.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +39,10 @@ public class AppController {
 
     @PostMapping("/")
     @ResponseBody
-    public ResponseEntity<List<Vacancy>> analyseVacancyByName(@RequestParam String vacancyName) throws IOException {
-        List<Vacancy> vacancies = vacancyService.findVacanciesByName(vacancyName);
+    public synchronized ResponseEntity<List<Vacancy>> analyseVacancyByName(@RequestParam String vacancyName) throws IOException {
+        List<Vacancy> vacancies = vacancyService.findVacanciesByNameLike(vacancyName);
         HashMap<String, Integer> skillsFrequencies = new HashMap<>();
-        if (vacancies.size() == 0) {
+        if (vacancies.size() < 100) {
             vacancies = restService.getVacanciesByNameFromHH(vacancyName);
             for (Vacancy vacancy : vacancies) {
                 List<Skill> skillsOfVacancy = restService.findSkillsOfVacancyById(vacancy.getId());
@@ -64,7 +63,7 @@ public class AppController {
             }
         }
         FileUtils.saveToCSV(vacancyName, skillsFrequencies);
-
+        FileUtils.getInfographic(vacancyName);
         return new ResponseEntity<>(vacancies, HttpStatus.OK);
     }
 

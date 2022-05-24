@@ -35,7 +35,8 @@ public class VacancyService {
         return vacancyRepository.findVacancyById(id);
     }
 
-    public List<Vacancy> findVacanciesByName(String name) {
-        return vacancyRepository.findVacanciesByName(name);
+    public List<Vacancy> findVacanciesByNameLike(String name) {
+        System.out.println(name);
+        return vacancyRepository.findVacanciesByNameLike(name);
     }
 }
