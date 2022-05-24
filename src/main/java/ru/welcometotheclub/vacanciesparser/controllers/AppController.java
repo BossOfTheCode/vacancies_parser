@@ -39,7 +39,7 @@ public class AppController {
 
     @PostMapping("/")
     @ResponseBody
-    public synchronized ResponseEntity<List<Vacancy>> analyseVacancyByName(@RequestParam String vacancyName) throws IOException {
+    public ResponseEntity<List<Vacancy>> analyseVacancyByName(@RequestParam String vacancyName) throws IOException, InterruptedException {
         List<Vacancy> vacancies = vacancyService.findVacanciesByNameLike(vacancyName);
         HashMap<String, Integer> skillsFrequencies = new HashMap<>();
         if (vacancies.size() < 100) {

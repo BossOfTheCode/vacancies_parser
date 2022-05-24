@@ -1,6 +1,5 @@
 package ru.welcometotheclub.vacanciesparser.utils;
 
-import ru.welcometotheclub.vacanciesparser.models.entity.Skill;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +23,7 @@ public class FileUtils {
     public static void getInfographic(String vacancyName) {
         File python = new File (System.getenv("LOCALAPPDATA") + "/Programs/Python/Python39/python.exe");
         File inputFile = new File("src/main/resources/datasets/" + vacancyName + ".csv");
-        File outFile = new File("src/main/resources/static/" + vacancyName + ".png");
+        File outFile = new File("src/main/resources/static/images/" + vacancyName + ".png");
         File scriptFile = new File("src/main/resources/python/main.py");
         ProcessBuilder processBuilder =
                 new ProcessBuilder(python.getAbsolutePath(),

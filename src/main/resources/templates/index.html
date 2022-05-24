@@ -17,13 +17,13 @@
 
         function ajaxPost() {
             let url = "http://localhost:8090/?vacancyName=" + $("#vacancyName").val();
-            let img_path = '/' + $("#vacancyName").val() + '.png'
+            let img_path = '/images/' + $("#vacancyName").val() + '.png'
             $.ajax({
                 type: "POST",
                 url: url,
                 success: function (response) {
                     let tbody = document.getElementById("tbody");
-                    console.log(img_path);
+                    tbody.innerHTML = '';
                     for (let obj in response) {
                         let data = response[obj];
                         let minSalary = data['minimalSalary'] === null ? "не указано" : data['minimalSalary'];
